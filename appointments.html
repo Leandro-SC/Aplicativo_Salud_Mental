@@ -45,64 +45,33 @@
         $(document).ready(function () {
             // Cargar la lista de profesionales cuando la página esté lista
             $.ajax({
-                url: '/professionals/list',
-                method: 'GET',
-                success: function (data) {
-                    const professionalsList = $('#professionals-list');
-                    data.forEach(professional => {
-                        professionalsList.append(`
-                            <div class="col-md-4">
-                                <div class="professional-card">
-                                    <img src="img/professional-placeholder.jpg" alt="${professional.name}" class="img-fluid">
-                                    <div class="professional-info">
-                                        <h4>${professional.name}</h4>
-                                        <p>${professional.description}</p>
-                                        <button class="btn btn-primary btn-block view-calendar" data-professional-id="${professional.id}">Ver Agenda</button>
-                                    </div>
-                                </div>
-                            </div>
-                        `);
-                    });
-
-                    // Vincular los botones de "Ver Agenda" con la función de mostrar el calendario
-                    $('.view-calendar').click(function () {
-                        const professionalId = $(this).data('professional-id');
-
-                        // Mostrar el contenedor del calendario
-                        $('#calendar-container').addClass('active');
-
-                        // Inicializar o actualizar el calendario
-                        $('#calendar').fullCalendar('destroy'); // Destruir el calendario existente antes de volver a cargarlo
-                        $('#calendar').fullCalendar({
-                            header: {
-                                left: 'prev,next today',
-                                center: 'title',
-                                right: 'month,agendaWeek,agendaDay'
-                            },
-                            events: function (start, end, timezone, callback) {
-                                $.ajax({
-                                    url: '/appointments/available-slots',
-                                    data: {
-                                        professional_id: professionalId,
-                                        start: start.format(),
-                                        end: end.format()
-                                    },
-                                    success: function (events) {
-                                        callback(events);
-                                    }
-                                });
-                            },
-                            eventClick: function (event) {
-                                alert('Cita seleccionada para: ' + event.start.format('YYYY-MM-DD HH:mm'));
-                            }
-                        });
-                    });
-                },
-                error: function () {
-                    alert('Error al cargar la lista de profesionales.');
-                }
-            });
+    url: 'http://localhost:3000/professionals/list',
+    method: 'GET',
+    success: function (data) {
+        console.log(data);  // Imprime los datos recibidos en la consola
+        const professionalsList = $('#professionals-list');
+        data.forEach(professional => {
+            professionalsList.append(`
+                <div class="col-md-4">
+                    <div class="professional-card">
+                        <img src="img/professional-placeholder.jpg" alt="${professional.name}" class="img-fluid">
+                        <div class="professional-info">
+                            <h4>${professional.name}</h4>
+                            <p>${professional.description}</p>
+                            <button class="btn btn-primary btn-block view-calendar" onclick="location.href='professional.html?id=${professional.id}'">Ver Agenda</button>
+                        </div>
+                    </div>
+                </div>
+            `);
         });
+    },
+    error: function (xhr, status, error) {
+        console.error('Error al cargar la lista de profesionales:', error);  // Imprime detalles del error en la consola
+        alert('Error al cargar la lista de profesionales.');
+    }
+});
+
+ });
     </script>
 </body>
 

@@ -12,16 +12,23 @@ dotenv.config();
 //     port: process.env.DB_PORT
 // });
 
+const db = mysql.createConnection({
+    host: "127.0.0.1",
+    user: "root",
+    password: "$$etlPASS2024",
+    database: "salud_mental",
+    port: "3306"
+});
 
-// db.connect((err) => {
-//     if (err) {
-//         console.error('Error connecting to the database:', err.message);
-//         return;
-//     }
-//     console.log('Connected to the MySQL database.');
-// });
+
+db.connect((err) => {
+    if (err) {
+        console.error('Error connecting to the database:', err.message);
+        return;
+    }
+    console.log('Connected to the MySQL database.');
+});
 
 
-// module.exports = db;
+module.exports = db;
 
-console.log(process.env);
